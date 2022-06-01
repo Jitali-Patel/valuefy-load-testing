@@ -1,6 +1,44 @@
-  
 # scaleit-load: Performance testing of wealth app services
+****  
+1. Install k6
+     Using Homebrew:
+     ```
+   brew install k6
+   ```
+    Using Windows Package Manager:
+     ```
+    winget install k6
+   ```
+2. Clone Git repository
 
+## Running Performance Tests
+There are 2 ways we can exeucte the tests
+**1.  Running local tests:** 
+ ```
+ k6 run script.js
+```
+   Now let's run a load test with more than one virtual user and a longer duration:
+   ```
+  k6 run --vus 10 --duration 30s script.js
+ ```
+**2.  Running cloud tests.**   
+To run cloud tests from the CLI
+1.  Register a k6 Cloud account.
+2.  Log in to your account via the CLI.
+ ```
+ k6 login cloud 
+ ```
+   or        
+ ```
+ k6 login cloud -t ${API_Token}
+ ```
+  Note: Here you can provide API token from your cloud account.
+
+3.  Use the  k6 cloud  command to run the script you already have.
+   ```
+   k6 cloud script.js
+ ```
+     
 ## Traffic patterns
 - Shared iterations among virtual users
 ```
@@ -17,7 +55,7 @@ export const options = {
   };
 
   export default function() {
-    let response = http.get("[http://localhost/cart](http://localhost/cart)");
+    let response = http.get("[[http://localhost/cart](http://localhost/cart)](http://localhost/cart](http://localhost/cart))");
     sleep(0.5);
   }
 ```
@@ -36,7 +74,7 @@ export const options = {
  };
   
   export default function() {
-    let response = http.get("http://localhost/cart");
+    let response = http.get("[http://localhost/cart](http://localhost/cart)");
     sleep(0.5);
   }
 ```
@@ -54,7 +92,7 @@ export const options = {
  };
   
  export default function() {
-    let response = http.get("http://localhost/cart");
+    let response = http.get("[http://localhost/cart](http://localhost/cart)");
     sleep(0.5);
  }
 ```
@@ -75,7 +113,7 @@ export const options = {
  };
   
  export default function() {
-    let response = http.get("http://localhost/cart");
+    let response = http.get("[http://localhost/cart](http://localhost/cart)");
     sleep(0.5);
  }
 ```
@@ -99,7 +137,7 @@ export const options = {
  };
   
  export default function() {
-    let response = http.get("http://localhost/cart");
+    let response = http.get("[http://localhost/cart](http://localhost/cart)");
     sleep(0.5);
  }
 ```
@@ -130,7 +168,12 @@ export const options = {
  };
   
  export default function() {
-    let response = http.get("http://localhost/cart");
+    let response = http.get("[http://localhost/cart](http://localhost/cart)");
     sleep(0.5);
  }
 ```
+
+## Reports
+1. We can also make k6 output detailed statistics in a CSV format by using the --out/-o option for k6 run, like this:`k6 run --out csv=result.csv script.js`
+
+2. We can also make k6 output detailed statistics in a JSON format by using the --out/-o option for k6 run, like this:`k6 run --out json=result.json script.js`
