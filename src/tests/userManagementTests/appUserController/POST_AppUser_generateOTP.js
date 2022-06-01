@@ -1,11 +1,9 @@
 import http from 'k6/http';
 import { check, group } from 'k6';
 import { handleSummary } from '../../../../helpers/report_generater.js';
-
-// const abc = require("../../../../helpers/report_generater");
-// console.log(abc.test);
 import { userManegementConfig } from '../../../../environmentconfig.js';
 
+// console.log(handleSummary());
 export const options = {
    scenarios: {
      // This will execute 50 interation shared by 10 vus with maximum duration 30s.
@@ -18,12 +16,19 @@ export const options = {
      }
    }
  };
-export default () => {
-    group ('get account count ' , function () {
-      let response = http.get(`${__ENV.BASE_URL}/Account/count`)
+
+export default () => {  
+     
+const payload = {
+    "contactNumber": "1234512345",
+    "countryCode": "+91",
+  }
+   
+group ('post appUser generateOTP ' , function () {
+      let response = http.post(`${__ENV.BASE_URL}/AppUser/generateOTP`,JSON.stringify(payload));
+          console.log(JSON.stringify(response));
           check(response, {
           'is status code 200': (r) => r.status === 200,
         });
   });
 }
-
