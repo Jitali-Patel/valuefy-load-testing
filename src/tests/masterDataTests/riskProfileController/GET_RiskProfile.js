@@ -1,23 +1,24 @@
 import http from 'k6/http';
 import { check, group } from 'k6';
+import { handleSummary } from '../../../../helpers/report_generater.js';
+import { masterDataConfig } from '../../../../environmentconfig.js';
 
 export const options = {
-   stages: [
-      { duration: '1s', target: 0},
-      { duration: '1s', target: 50}
-   ],
-
-   thresholds:{
-    'iteration_duration': ['p(90) < 500'],
-    'http_req_duration' : ['max< 350'],
-   },
-}
-
-export default () => {
-  
+   scenarios: {
+     // This will execute 50 interation shared by 10 vus with maximum duration 30s.
+     example_scenario: {
+       env: masterDataConfig(),
+       executor: 'shared-iterations',
+       vus: 10,
+       iterations: 50,
+       maxDuration: '30s'
+     }
+   }
+ };
+//https://delta-dev.finzipp.com/API/MasterData/RiskProfile
+export default () => {  
   group ('get riskProfile ' , function () {
-      let response = http.get("https://delta-dev.finzipp.com/API/MasterData/RiskProfile");
-      console.log(response.json);
+      let response = http.get(`${__ENV.BASE_URL}/RiskProfile`);
           check(response, {
           'is status code 200': (r) => r.status === 200,
         });
