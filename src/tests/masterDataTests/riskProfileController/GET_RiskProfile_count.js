@@ -1,22 +1,16 @@
 import http from 'k6/http';
 import { check, group } from 'k6';
+import { handleSummary } from '../../../../helpers/report_generater.js';
+import { options1 } from '../../userManagementTests/appUserController/POST_AppUser_generateOTP.js';
+import { baseURI } from '../../../../environmentconfig.js';
 
-export const options = {
-   stages: [
-      { duration: '1s', target: 0},
-      { duration: '1s', target: 50}
-   ],
+export { handleSummary };
+export { options1 }
 
-   thresholds:{
-    'iteration_duration': ['p(90) < 500'],
-    'http_req_duration' : ['max< 350'],
-   },
-}
-
-export default () => {
-  
+export default () => {  
+  const baseUrl = baseURI();
   group ('get riskProfile count ' , function () {
-      let response = http.get("https://delta-dev.finzipp.com/API/MasterData/RiskProfile/count");
+      let response = http.get(`${baseUrl}MasterData/RiskProfile/count`);
           check(response, {
           'is status code 200': (r) => r.status === 200,
         });

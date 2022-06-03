@@ -1,36 +1,16 @@
 import http from 'k6/http';
 import { check, group } from 'k6';
-import { masterDataConfig } from '../../../../environmentconfig.js';
+import { handleSummary } from '../../../../helpers/report_generater.js';
+import { options1 } from '../../userManagementTests/appUserController/POST_AppUser_generateOTP.js';
+import { baseURI } from '../../../../environmentconfig.js';
 
-// export const options = {
-//    env: masterDataConfig(),
-//    stages: [
-//       { duration: '1s', target: 1},
-//       // { duration: '1s', target: 50}
-//    ],
+export { handleSummary };
+export { options1 }
 
-//    thresholds:{
-//     'iteration_duration': ['p(90) < 500'],
-//     'http_req_duration' : ['max< 350'],
-//    },
-// }
-export const options = {
-   scenarios: {
-     // This will execute 50 interation shared by 10 vus with maximum duration 30s.
-     example_scenario: {
-       env: masterDataConfig(),
-       executor: 'shared-iterations',
-       vus: 10,
-       iterations: 50,
-       maxDuration: '30s'
-     }
-   }
- };
-
-export default () => {
-
+export default () => {  
+  const baseUrl = baseURI();
   group ('patch riskProfile' , function () {
-      let response = http.patch(`${__ENV.BASE_URL}/RiskProfile`);
+      let response = http.patch(`${baseUrl}MasterData/RiskProfile/count`);
           check(response, {
           'is status code 200': (r) => r.status === 200,
         });
