@@ -1,36 +1,30 @@
 import http from 'k6/http';
 import { check, group } from 'k6';
 import { handleSummary } from '../../../../helpers/report_generater.js';
-import { userManegementConfig } from '../../../../environmentconfig.js';
+import { baseURI } from '../../../../environmentconfig.js';
+import { options1 } from '../../masterDataTests/riskProfileController/GET_RiskProfile_count.js';
 
-// console.log(handleSummary());
-export const options = {
-   scenarios: {
-     // This will execute 50 interation shared by 10 vus with maximum duration 30s.
-     example_scenario: {
-       env: userManegementConfig(),
-       executor: 'shared-iterations',
-       vus: 10,
-       iterations: 50,
-       maxDuration: '30s'
-     }
-   }
- };
+export { handleSummary };
+export { options1 }
 
- export default () => {  
-     
+export default () => {  
+    const baseUrl = baseURI()
     const body = {
-        "otp": "123456",
-        "contactNumber": "1234512345",
-        "deviceUniqueId": "deviceUniqueId",
+        "contactNumber": "7622032573",
         "countryCode": "+91",
-      }
+        "deviceUniqueId": "deviceUniqueId",
+        "otp": "123456"
+  }
        
-    group ('post appUser verifyOTP ' , function () {
-          let response = http.post(`${__ENV.BASE_URL}/AppUser/verifyOTP`,JSON.stringify(body));
-              console.log(response.status);
-              check(response, {
+    group ('post appUser verifyOTP' , function () {
+          console.log(`${baseUrl}`);
+          // let response = http.post(`${baseUrl}UserManagement/AppUser/verifyOTP`, JSON.stringify(body));
+          let response = http.post("https://delta-dev.finzipp.com/API/UserManagement/AppUser/verifyOTP",JSON.stringify(body));
+          console.log(response.status);
+          console.log(JSON.stringify(response));
+          check(response, {
               'is status code 200': (r) => r.status === 200,
-            });
-      });
-    }
+          });
+    });
+}
+

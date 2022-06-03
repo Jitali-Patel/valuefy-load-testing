@@ -1,34 +1,26 @@
 import http from 'k6/http';
 import { check, group } from 'k6';
+import { baseURI } from '../../../../environmentconfig.js';
 import { handleSummary } from '../../../../helpers/report_generater.js';
-import { userManegementConfig } from '../../../../environmentconfig.js';
+import { options1 } from '../../../../helpers/common.js';
 
-// console.log(handleSummary());
-export const options = {
-   scenarios: {
-     // This will execute 50 interation shared by 10 vus with maximum duration 30s.
-     example_scenario: {
-       env: userManegementConfig(),
-       executor: 'shared-iterations',
-       vus: 10,
-       iterations: 50,
-       maxDuration: '30s'
-     }
-   }
- };
+export { handleSummary };
+export { options1 };
 
 export default () => {  
-     
+const baseUrl = baseURI();
 const payload = {
-    "contactNumber": "1234512345",
-    "countryCode": "+91",
-  }
+  "contactNumber": "7622032573",
+  "countryCode": "+91"
+}
    
 group ('post appUser generateOTP ' , function () {
-      let response = http.post(`${__ENV.BASE_URL}/AppUser/generateOTP`,JSON.stringify(payload));
+      let response = http.post(`${baseUrl}UserManagement/AppUser/generateOTP`, JSON.stringify(payload));
+      console.log(response.status);
           console.log(JSON.stringify(response));
           check(response, {
           'is status code 200': (r) => r.status === 200,
         });
   });
 }
+
