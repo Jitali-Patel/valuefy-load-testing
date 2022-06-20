@@ -11,4 +11,3 @@ jobs:
         uses: grafana/k6-action@v0.2.0
         with:
           filename: src/tests/masterDataTests/riskProfileController/GET_RiskProfile.js
-          flags: -e ENV_URL="https://delta-dev.finzipp.com/API" -e SERVICE="MasterData" -e  SUB_MODULE="RiskProfile"
