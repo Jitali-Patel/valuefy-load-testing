@@ -1,0 +1,10 @@
+[
+    {
+        "base_endpoint": "delta-dev.finzipp.com",
+        "master_data_service_name": "MasterData",
+        "user_management_service_name": "UserManagement",
+        "default_profile": {
+            "token": ""
+        }
+    }
+]
